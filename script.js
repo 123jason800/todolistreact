@@ -7,25 +7,21 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var NotesMenu = function NotesMenu(props) {
+    var categoryChange = props.categoryChange,
+        categories = props.categories;
 
+    var buttons = [];
+    for (var prop in categories) {
+        buttons.push(React.createElement(
+            "button",
+            { key: prop, onClick: categoryChange, className: "btn btn-outline-dark me-2 " + categories[prop] },
+            prop
+        ));
+    }
     return React.createElement(
         "div",
-        { "class": "d-flex mb-5" },
-        React.createElement(
-            "button",
-            { className: "btn btn-outline-dark me-2" },
-            "All"
-        ),
-        React.createElement(
-            "button",
-            { className: "btn btn-outline-dark me-2" },
-            "Completed "
-        ),
-        React.createElement(
-            "button",
-            { className: "btn btn-outline-dark me-2" },
-            "Incomepleted"
-        )
+        { className: "d-flex mb-5" },
+        buttons
     );
 };
 
@@ -60,15 +56,42 @@ var ToDoList = function (_React$Component) {
         _this.state = {
             currentNote: '',
             notes: [],
-            category: 'all'
+            categories: {
+                All: 'active',
+                Completed: '',
+                Incomepleted: ''
+            }
+
         };
         _this.Apikey = 248;
+        _this.categoryChange = _this.categoryChange.bind(_this);
         return _this;
     }
 
     _createClass(ToDoList, [{
+        key: "getCurrentActive",
+        value: function getCurrentActive(object) {
+            for (var prop in object) {
+                if (object[prop] === 'active') {
+
+                    return prop;
+                }
+            }
+            return null;
+        }
+    }, {
+        key: "categoryChange",
+        value: function categoryChange(event) {
+            var category = event.target.textContent;
+            var categories = Object.assign({}, this.state.categories);
+            categories[this.getCurrentActive(categories)] = '';
+            categories[category] = 'active';
+            this.setState({ categories: categories });
+        }
+    }, {
         key: "render",
         value: function render() {
+            console.log(this.state.categories);
             return React.createElement(
                 "div",
                 null,
@@ -83,7 +106,7 @@ var ToDoList = function (_React$Component) {
                     React.createElement(
                         "div",
                         { className: "row" },
-                        React.createElement(NotesMenu, { category: this.state.category }),
+                        React.createElement(NotesMenu, { categories: this.state.categories, categoryChange: this.categoryChange }),
                         React.createElement(CreateNote, null),
                         React.createElement(ShowNotes, null)
                     )

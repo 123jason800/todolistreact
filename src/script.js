@@ -1,10 +1,12 @@
 const NotesMenu = (props) => {
-   
+    const {categoryChange,categories} = props;
+    const buttons = [];
+    for (let prop in categories) {
+        buttons.push(<button key={prop} onClick={categoryChange} className={`btn btn-outline-dark me-2 ${categories[prop]}`} >{prop}</button>);
+    }
     return (
-        <div class="d-flex mb-5">
-            <button className="btn btn-outline-dark me-2">All</button>
-            <button className="btn btn-outline-dark me-2">Completed </button>
-            <button className="btn btn-outline-dark me-2">Incomepleted</button>
+        <div className="d-flex mb-5">
+            {buttons}
         </div>
     );
 }
@@ -21,7 +23,7 @@ const ShowNotes = (props) => {
     return (
         <div className="div-col-3">
             <div className="post-sticks">
-                
+
             
             </div>
         </div>
@@ -34,23 +36,48 @@ class ToDoList extends React.Component {
         this.state = {
             currentNote:'',
             notes:[],
-            category:'all'
+            categories:{
+                All:'active',
+                Completed:'',
+                Incomepleted:'', 
+            }
+              
         }
         this.Apikey = 248;
+        this.categoryChange = this.categoryChange.bind(this);
+    }
+    
+    getCurrentActive(object) {
+        for (let prop in object) {
+            if (object[prop] === 'active') {
+              
+                return prop;
+            }
+        }
+        return null;
     }
 
+    categoryChange(event) {
+       const category = event.target.textContent;
+       let categories = {...this.state.categories};
+       categories[this.getCurrentActive(categories)] = '';
+       categories[category] = 'active';
+       this.setState({categories});
+    }
+
+
     render() {
+        console.log(this.state.categories);
         return(
             <div>
                 <h1 className="text-center"> To Do List </h1>
                 <div className="container">
                     <div className="row">
-                        <NotesMenu category={this.state.category}/>
+                        <NotesMenu categories={this.state.categories} categoryChange={this.categoryChange} />
                         <CreateNote />
                         <ShowNotes />
                     </div>
                 </div>
-             
             </div>
         );
     }
