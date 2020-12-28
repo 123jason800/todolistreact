@@ -1,0 +1,11 @@
+textarea {
+    border: 1px solid black;
+    resize: none;
+    
+}
+
+
+.frm-create-note {
+    padding: 10px 15px;
+    border: 1px solid black;
+}

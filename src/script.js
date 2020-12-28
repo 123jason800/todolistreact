@@ -14,7 +14,14 @@ const NotesMenu = (props) => {
 const CreateNote = (props) => {
     return(
         <div className="col-3">
-            <button className="btn btn-primary"> Create A Note</button>
+            <form onSubmit={props.handleSubmit} className="frm-create-note d-flex flex-column">
+                <textarea onChange={props.handleChange} rows="5" value={props.currentNote}>
+                    
+                </textarea>
+            
+                <input type="submit" className="btn btn-outline-dark mt-3" value="Create a Note"/> 
+            </form>
+           
         </div>
     );
 }
@@ -39,11 +46,14 @@ class ToDoList extends React.Component {
             categories:{
                 All:'active',
                 Completed:'',
-                Incomepleted:'', 
+                Incomepleted:''
             }
-              
         }
+
+      
+
         this.Apikey = 248;
+        this.handleChange = this.handleChange.bind(this);
         this.categoryChange = this.categoryChange.bind(this);
     }
     
@@ -65,16 +75,26 @@ class ToDoList extends React.Component {
        this.setState({categories});
     }
 
+    handleChange(e) {
+        const {value} = e.target;
+        this.setState({
+            currentNote: value
+        });
+
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+    }
 
     render() {
-        console.log(this.state.categories);
         return(
             <div>
                 <h1 className="text-center"> To Do List </h1>
                 <div className="container">
                     <div className="row">
                         <NotesMenu categories={this.state.categories} categoryChange={this.categoryChange} />
-                        <CreateNote />
+                        <CreateNote handleChange={this.handleChange} handleSubmit={this.handleSubmit} currentNote={this.state.currentNote} />
                         <ShowNotes />
                     </div>
                 </div>

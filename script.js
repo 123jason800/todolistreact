@@ -30,9 +30,10 @@ var CreateNote = function CreateNote(props) {
         "div",
         { className: "col-3" },
         React.createElement(
-            "button",
-            { className: "btn btn-primary" },
-            " Create A Note"
+            "form",
+            { onSubmit: props.handleSubmit, className: "frm-create-note d-flex flex-column" },
+            React.createElement("textarea", { onChange: props.handleChange, rows: "5", value: props.currentNote }),
+            React.createElement("input", { type: "submit", className: "btn btn-outline-dark mt-3", value: "Create a Note" })
         )
     );
 };
@@ -61,9 +62,10 @@ var ToDoList = function (_React$Component) {
                 Completed: '',
                 Incomepleted: ''
             }
-
         };
+
         _this.Apikey = 248;
+        _this.handleChange = _this.handleChange.bind(_this);
         _this.categoryChange = _this.categoryChange.bind(_this);
         return _this;
     }
@@ -89,9 +91,22 @@ var ToDoList = function (_React$Component) {
             this.setState({ categories: categories });
         }
     }, {
+        key: "handleChange",
+        value: function handleChange(e) {
+            var value = e.target.value;
+
+            this.setState({
+                currentNote: value
+            });
+        }
+    }, {
+        key: "handleSubmit",
+        value: function handleSubmit(e) {
+            e.preventDefault();
+        }
+    }, {
         key: "render",
         value: function render() {
-            console.log(this.state.categories);
             return React.createElement(
                 "div",
                 null,
@@ -107,7 +122,7 @@ var ToDoList = function (_React$Component) {
                         "div",
                         { className: "row" },
                         React.createElement(NotesMenu, { categories: this.state.categories, categoryChange: this.categoryChange }),
-                        React.createElement(CreateNote, null),
+                        React.createElement(CreateNote, { handleChange: this.handleChange, handleSubmit: this.handleSubmit, currentNote: this.state.currentNote }),
                         React.createElement(ShowNotes, null)
                     )
                 )
