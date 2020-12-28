@@ -1,11 +1,33 @@
+body {
+    font-size: 20px;
+}
+
+
 textarea {
     border: 1px solid black;
     resize: none;
     
 }
 
-
 .frm-create-note {
     padding: 10px 15px;
     border: 1px solid black;
+}
+
+.note {
+    border: 1px solid black;
+    height: 100%;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
 }
